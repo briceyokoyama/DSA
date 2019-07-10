@@ -54,7 +54,9 @@ function sumArray(array) {
 // reverseString("internet")    // => "tenretni"
 // reverseString("friends")     // => "sdneirf"
 function reverseString(str) {
+  if (str.length === 0) return str;
 
+  return reverseString(str.slice(1)) + str[0];
 }
 
 
@@ -75,7 +77,13 @@ function reverseString(str) {
 // pow(3, 4)    // => 81
 // pow(2, -5)   // => 0.03125
 function pow(base, exponent) {
+  if (exponent === 0) return 1;
 
+  if (exponent > 0) {
+    return base * pow(base, exponent - 1);
+  } else {
+    return 1/base * pow(base, exponent + 1);
+  }
 }
 
 
@@ -108,7 +116,19 @@ function pow(base, exponent) {
 //     2-dimensional array: [['some data']]
 //     3-dimensional array: [[['some data']]]
 function flatten(data) {
+  if (!Array.isArray(data)) return data;
 
+  let arr = [];
+
+  for(let i = 0; i < data.length; i++) {
+    if (Array.isArray(data[i])) {
+      arr = arr.concat(flatten(data[i]));
+    } else {
+      arr.push(data[i]);
+    }
+  }
+
+  return arr;
 }
 
 // Write a function, fileFinder(directories, targetFile), that accepts an object representing directories and a string respresenting a filename.
@@ -151,7 +171,17 @@ function flatten(data) {
 // fileFinder(desktop, 'everlong.flac');            // => true
 // fileFinder(desktop, 'sequoia.jpeg');             // => false
 function fileFinder(directories, targetFile) {
+  let keys = Object.keys(directories);
 
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i] === targetFile) {
+      return true;
+    }
+    if (keys[i][0] === '/' && fileFinder(directories[keys[i]], targetFile)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 
@@ -165,7 +195,19 @@ function fileFinder(directories, targetFile) {
 // pathFinder(desktop, 'everlong.flac'));       // => '/music/genres/rock/everlong.flac'
 // pathFinder(desktop, 'honeybadger.png'));     // => null
 function pathFinder(directories, targetFile) {
+  let path = "/";
+  let keys = Object.keys(directories);
 
+  for ( let i = 0; i < keys.length; i++) {
+    if (keys[i] === targetFile) {
+      return path + keys[i];
+    }
+
+    if (keys[i][0] === "/" && pathFinder(directories[keys[i]], targetFile)) {
+      return keys[i] + pathFinder(directories[keys[i]], targetFile);
+    }
+  }
+  return null;
 }
 
 
