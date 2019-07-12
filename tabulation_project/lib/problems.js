@@ -21,7 +21,19 @@
 // stepper([3, 4, 1, 0, 10]);           // => true, because we can step through elements 3 -> 4 -> 10
 // stepper([2, 3, 1, 1, 0, 4, 7, 8])    // => false, there is no way to step to the end
 function stepper(nums) {
+  let table  = new Array(nums.length).fill(false);
+  table[0] = true;
 
+  for (let i = 0; i < nums.length-1; i++) {
+    if (table[i]) {
+      for (let j = i + 1; j <= i + nums[i] && j <= nums.length-1; j++) {
+        table[j] = true;
+      }
+    } else {
+      return false;
+    }
+  }
+  return table[nums.length-1];
 }
 
 
@@ -35,8 +47,28 @@ function stepper(nums) {
 //
 // maxNonAdjacentSum([2, 7, 9, 3, 4])   // => 15, because 2 + 9 + 4
 // maxNonAdjacentSum([4,2,1,6])         // => 10, because 4 + 6 
-function maxNonAdjacentSum(nums) {
 
+// // tabulation
+// function maxNonAdjacentSum(nums) {
+//   if (nums.length === 0 ) return 0;
+//   let table = new Array(nums.length).fill(0);
+//   table[0] = nums[0];
+
+//   for (let i = 0; i < nums.length; i++) {
+//     let max = 0;
+//     for (let j = 0; j < i - 1; j++) {
+//       if (table[j] > max) {
+//         max = table[j];
+//       }
+//     }
+//     table[i] = nums[i] + max;
+//   }
+//   return Math.max(...table);
+// }
+
+// memoization
+function maxNonAdjacentSum(nums, memo = {}) {
+  if (nums.length === 0) return 0;
 }
 
 
