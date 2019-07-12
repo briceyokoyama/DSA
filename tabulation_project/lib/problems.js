@@ -68,7 +68,25 @@ function stepper(nums) {
 
 // memoization
 function maxNonAdjacentSum(nums, memo = {}) {
-  if (nums.length === 0) return 0;
+  let key = nums + '';
+  if (key in memo) return memo[key];
+  if (nums.length <= 0) {
+    memo[key] = 0;
+    return 0;
+  }
+
+  let max = nums[0];
+  let curr;
+  
+  for (let i = 1; i < nums.length; i++) {
+    curr = nums[i] + maxNonAdjacentSum(nums.slice(0, i - 1), memo);
+    if (curr > max) {
+      max = curr;
+    }
+  }
+  memo[key] = max;
+  return memo[key]
+  
 }
 
 
@@ -85,7 +103,23 @@ function maxNonAdjacentSum(nums, memo = {}) {
 // minChange([1, 5, 10, 25], 15)    // => 2, because 10 + 5 = 15
 // minChange([1, 5, 10, 25], 100)   // => 4, because 25 + 25 + 25 + 25 = 100
 function minChange(coins, amount) {
+  let table = new Array(amount + 1).fill(false);
+  table[0] = 0;
+  let currMin;
+  let remaining;
 
+  for (let i = coins[0]; i <= amount; i++) {
+    currMin = Infinity;
+    for (let j = 0; j < coins.length; j++) {
+      if (coins[j] > i) continue;
+      remaining = i - coins[j];
+      if (table[remaining] !== false && table[remaining] < currMin) {
+        currMin = table[remaining]
+      }
+    }
+    table[i] = currMin + 1;
+  }
+  return table[table.length - 1];
 }
 
 
