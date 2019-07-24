@@ -65,9 +65,6 @@ class Trie {
     let words = [];
     let addWords = []
 
-    // if (root.isTerminal) words.push("");
-
-
     for (let i = 0; i < prefix.length; i++) {
       if (!(prefix[i] in currNode.children)) return [];
       currNode = currNode.children[prefix[i]];
@@ -83,7 +80,6 @@ class Trie {
     }
     return [...words, ...addWords];
   }
-
 }
 
 module.exports = {
